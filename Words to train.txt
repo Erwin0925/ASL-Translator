@@ -2,23 +2,23 @@
 2.  Friends
 3.  Work
 4.  School
-5.  House/Home
+5.  Home
 6.  Car
 7.  Happy
 8.  Sad
 9.  Play
 10. Help
-11. Eat/Food
+11. Eat
 12. Drink
 13. Sleep
-14. Book
+14. Sorry
 15. Computer
 16. Money
 17. Phone
 18. Clothes
-19. Bathroom
+19. Me
 20. Stop
 
 ------------------
 
-["Family", "Friends", "Work", "School", "House/Home", "Car", "Happy", "Sad", "Play", "Help", "Eat/Food", "Drink", "Sleep", "Book", "Computer", "Money", "Phone", "Clothes", "Bathroom", "Stop"]
+["Family", "Friends", "Work", "School", "Home", "Car", "Happy", "Sad", "Play", "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Clothe", "Me", "Stop"]
