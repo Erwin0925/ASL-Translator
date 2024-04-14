@@ -12,6 +12,29 @@ This project aims to build an American Sign Language (ASL) translation system th
 - **Data Collection**: Each of the 20 words is recorded 40 times to capture a range of expressions and nuances.
 - **Data Storage**: The keypoints extracted from these recordings are stored in `.npy` files. There are 40 `.npy` files for each word, with each file representing a single recording session.
 
+### Supported Words
+The ASL translation system currently supports the following 20 commonly used daily words. These words were chosen for their frequency and utility in everyday communication:
+1. Family
+2. Friends
+3. Work
+4. School
+5. Home
+6. Car
+7. Happy
+8. Sad
+9. Play
+10. Help
+11. Eat
+12. Drink
+13. Sleep
+14. Sorry
+15. Computer
+16. Money
+17. Phone
+18. Clothes
+19. Me
+20. Stop
+
 ## Models
 Two models have been developed for this project:
 - **LSTM Model**: Utilizes Long Short-Term Memory networks to analyze sequential data and predict translations.
@@ -19,3 +42,6 @@ Two models have been developed for this project:
 
 ## Database
 - **SSMS**: SQL Server Management Studio (SSMS) is used for managing the database operations related to the storage of ASL data and user interactions.
+
+
+
