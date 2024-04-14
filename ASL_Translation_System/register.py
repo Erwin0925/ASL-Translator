@@ -4,10 +4,6 @@ from tkinter import ttk
 import pyodbc
 import hashlib
 
-def hash_password(password):
-    """Return the SHA-256 hash of the password."""
-    return hashlib.sha256(password.encode()).hexdigest()
-
 class RegisterPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -115,36 +111,35 @@ class RegisterPage(tk.Frame):
         self.controller.show_frame("LoginPage")
 
     def insert_user_into_database(self, username, password, security_question, security_answer):
+        if not self.controller.db_connection:
+            tk.messagebox.showerror("Database Error", "No active database connection.")
+            return
+        
         try:
-            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
-            cursor = conn.cursor()
-            # Add the 'badge' column to the INSERT statement
+            cursor = self.controller.db_connection.cursor()
             cursor.execute("""
                 INSERT INTO users (username, password, security_question, security_question_answer, badge)
                 VALUES (?, ?, ?, ?, ?)
             """, (username, password, security_question, security_answer, "empty"))  # 'empty' is hard-coded
-            conn.commit()
+            self.controller.db_connection.commit()
             tk.messagebox.showinfo("Success", "Registration successful!")
         except pyodbc.Error as e:
             print(e)
-            tk.messagebox.showerror("Database Error", "Failed to insert record into the database, try again later")
-        finally:
-            if conn:
-                conn.close()
+            tk.messagebox.showerror("Database Error", "Failed to insert record into the database, try again later.")
 
     def username_exists(self, username):
+        if not self.controller.db_connection:
+            tk.messagebox.showerror("Database Error", "No active database connection.")
+            return False
+        
         try:
-            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
-            cursor = conn.cursor()
+            cursor = self.controller.db_connection.cursor()
             cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
             return cursor.fetchone() is not None
         except pyodbc.Error as e:
             print(e)
-            tk.messagebox.showerror("Database Error", "Failed to check username availability, try again later")
-        finally:
-            if conn:
-                conn.close()
-        return False  # Default return value in case of any error during the check
+            tk.messagebox.showerror("Database Error", "Failed to check username availability, try again later.")
+            return False
 
     def clear_fields(self):
         """Clears all text fields in the form."""

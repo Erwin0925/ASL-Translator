@@ -79,18 +79,21 @@ class LoginPage(tk.Frame):
             messagebox.showerror("Login Failed", "Incorrect username or password")
 
     def validate_credentials(self, username, password):
+        if not self.controller.db_connection:
+            messagebox.showerror("Database Error", "No active database connection.")
+            return False
+
         try:
-            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
-            cursor = conn.cursor()
+            cursor = self.controller.db_connection.cursor()
             cursor.execute("SELECT password FROM users WHERE username=?", (username,))
             result = cursor.fetchone()
-            conn.close()
             if result and result[0] == password:  # Plain text comparison, replace with hashed password comparison in production
                 return True
             else:
                 return False
         except pyodbc.Error as e:
-            print("Failed to connect to the database", e)
+            print("Failed to query the database", e)
+            messagebox.showerror("Database Error", "An error occurred while querying the database.")
             return False
 
     def clear_fields(self):

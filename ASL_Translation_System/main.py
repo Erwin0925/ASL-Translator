@@ -4,6 +4,7 @@ from register import RegisterPage
 from reset_pw import ResetPasswordPage
 from translate import TranslatePage
 from badge import BadgePage
+import pyodbc
 
 class MainApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -14,6 +15,9 @@ class MainApplication(tk.Tk):
         self.container.pack(side="top", fill="both", expand=True)
         self.container.grid_rowconfigure(0, weight=1)
         self.container.grid_columnconfigure(0, weight=1)
+
+        # Database connection setup
+        self.db_connection = self.create_db_connection()
 
         self.frames = {}
         self.username = None
@@ -26,6 +30,7 @@ class MainApplication(tk.Tk):
 
         self.show_frame("LoginPage")
         self.center_window()
+        self.protocol("WM_DELETE_WINDOW", self.on_close)  # Handle window close button.
 
     def init_frame(self, frame_class, container):
         frame = frame_class(parent=container, controller=self)
@@ -66,6 +71,19 @@ class MainApplication(tk.Tk):
         x = (self.winfo_screenwidth() // 2) - (width // 2)
         y = (self.winfo_screenheight() // 2) - (height // 2)
         self.geometry(f'{width}x{height}+{x}+{y}')
+
+    def create_db_connection(self):
+        try:
+            return pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
+        except Exception as e:
+            print("Failed to connect to the database:", e)
+            tk.messagebox.showerror("Database Error", "Failed to connect to the database.")
+            return None
+
+    def on_close(self):
+        if self.db_connection:
+            self.db_connection.close()
+        self.destroy()  # Properly destroy the Tkinter window
 
 if __name__ == "__main__":
     app = MainApplication()

@@ -113,31 +113,36 @@ class ResetPasswordPage(tk.Frame):
             self.clear_fields()
 
     def validate_security_info(self, username, security_question, security_answer):
+        if not self.controller.db_connection:
+            messagebox.showerror("Database Error", "No active database connection.")
+            return False
+
         try:
-            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
-            cursor = conn.cursor()
+            cursor = self.controller.db_connection.cursor()
             cursor.execute("""
                 SELECT security_question, security_question_answer FROM users 
                 WHERE username=?
             """, (username,))
             row = cursor.fetchone()
-            conn.close()
             if row and row[0] == security_question and row[1] == security_answer:
                 return True
             return False
         except pyodbc.Error as e:
             print("Database error:", e)
+            messagebox.showerror("Database Error", "An error occurred while querying the database.")
             return False
         
     def update_password(self, username, new_password):
+        if not self.controller.db_connection:
+            messagebox.showerror("Database Error", "No active database connection.")
+            return False
+
         try:
-            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
-            cursor = conn.cursor()
+            cursor = self.controller.db_connection.cursor()
             cursor.execute("""
                 UPDATE users SET password=? WHERE username=?
             """, (new_password, username))
-            conn.commit()
-            conn.close()
+            self.controller.db_connection.commit()
             return True
         except pyodbc.Error as e:
             print("Database error:", e)
