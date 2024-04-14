@@ -25,6 +25,7 @@ class MainApplication(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("LoginPage")
+        self.center_window()
 
     def init_frame(self, frame_class, container):
         frame = frame_class(parent=container, controller=self)
@@ -39,6 +40,7 @@ class MainApplication(tk.Tk):
         # Adjust window size based on the frame being shown
         self.adjust_window_size(page_name)
         self.frames[page_name].tkraise()
+        self.center_window()
 
     def adjust_window_size(self, page_name):
         sizes = {
@@ -56,6 +58,14 @@ class MainApplication(tk.Tk):
         self.init_frame(TranslatePage, self.container)
         self.init_frame(BadgePage, self.container)
         self.show_frame("TranslatePage")
+
+    def center_window(self):
+        self.update_idletasks()
+        width = self.winfo_width()
+        height = self.winfo_height()
+        x = (self.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.winfo_screenheight() // 2) - (height // 2)
+        self.geometry(f'{width}x{height}+{x}+{y}')
 
 if __name__ == "__main__":
     app = MainApplication()

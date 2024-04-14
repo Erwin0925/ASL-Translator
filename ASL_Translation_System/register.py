@@ -103,6 +103,11 @@ class RegisterPage(tk.Frame):
             self.password_entry.delete(0, tk.END)
             self.repeat_password_entry.delete(0, tk.END)
             return
+        
+        if self.username_exists(username):
+            tk.messagebox.showerror("Error", "Username is already taken!")
+            self.username_entry.delete(0, tk.END)
+            return
 
         # Insert data into the database
         self.insert_user_into_database(username, password, security_question, security_answer)
@@ -127,6 +132,19 @@ class RegisterPage(tk.Frame):
             if conn:
                 conn.close()
 
+    def username_exists(self, username):
+        try:
+            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+            return cursor.fetchone() is not None
+        except pyodbc.Error as e:
+            print(e)
+            tk.messagebox.showerror("Database Error", "Failed to check username availability, try again later")
+        finally:
+            if conn:
+                conn.close()
+        return False  # Default return value in case of any error during the check
 
     def clear_fields(self):
         """Clears all text fields in the form."""
