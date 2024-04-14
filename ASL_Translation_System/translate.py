@@ -281,9 +281,6 @@ class TranslatePage(tk.Frame):
         except pyodbc.Error as e:
             print("Database error:", e)
             return None
-
-        
-
         
     def update_user_badge(self):
         if self.user_badge == "Legend":
