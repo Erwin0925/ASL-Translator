@@ -1,7 +1,6 @@
 import tkinter as tk
 from translate import TranslatePage
 from test import TestPage
-from webcam_manager import WebcamManager
 
 class MainApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -17,15 +16,12 @@ class MainApplication(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        # Create a webcam manager instance
-        self.webcam_manager = WebcamManager()
-
         # A dictionary to hold the pages
         self.frames = {}
 
         for F in (TranslatePage, TestPage):
             page_name = F.__name__
-            frame = F(parent=container, controller=self, webcam_manager=self.webcam_manager)
+            frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
             
             # Put all of the pages in the same location;
