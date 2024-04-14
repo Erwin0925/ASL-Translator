@@ -1,42 +1,62 @@
 import tkinter as tk
+from login import LoginPage
+from register import RegisterPage
+from reset_pw import ResetPasswordPage
 from translate import TranslatePage
-from test import TestPage
+from badge import BadgePage
 
 class MainApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         
-        # Set the title and initial size of the window
         self.title("American Sign Language Translator")
-        self.geometry("1063x768")
+        self.container = tk.Frame(self)  # Make container an instance variable
+        self.container.pack(side="top", fill="both", expand=True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
-        # This container will hold all pages
-        container = tk.Frame(self)
-        container.pack(side="top", fill="both", expand=True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
-
-        # A dictionary to hold the pages
         self.frames = {}
+        self.username = None
 
-        for F in (TranslatePage, TestPage):
-            page_name = F.__name__
-            frame = F(parent=container, controller=self)
-            self.frames[page_name] = frame
-            
-            # Put all of the pages in the same location;
-            # The one on the top of the stacking order will be the one that is visible.
+        # Initialize only the necessary pages at startup
+        for F in (LoginPage, RegisterPage, ResetPasswordPage):
+            frame = F(parent=self.container, controller=self)
+            self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame("TranslatePage")
+        self.show_frame("LoginPage")
+
+    def init_frame(self, frame_class, container):
+        frame = frame_class(parent=container, controller=self)
+        self.frames[frame_class.__name__] = frame
+        frame.grid(row=0, column=0, sticky="nsew")
 
     def show_frame(self, page_name):
-        '''Show a frame for the given page name'''
-        frame = self.frames[page_name]
-        frame.tkraise()
+        # Check if the frame exists, if not, initialize it
+        if page_name not in self.frames and page_name in {"TranslatePage", "BadgePage"}:
+            self.init_frame(eval(page_name), self.frames["LoginPage"].parent)
+
+        # Adjust window size based on the frame being shown
+        self.adjust_window_size(page_name)
+        self.frames[page_name].tkraise()
+
+    def adjust_window_size(self, page_name):
+        sizes = {
+            "LoginPage": "350x350",
+            "RegisterPage": "350x520",
+            "ResetPasswordPage": "350x520",
+            "TranslatePage": "1063x768",
+            "BadgePage": "350x420"
+        }
+        if page_name in sizes:
+            self.geometry(sizes[page_name])
+
+    def set_username(self, username):
+        self.username = username
+        self.init_frame(TranslatePage, self.container)
+        self.init_frame(BadgePage, self.container)
+        self.show_frame("TranslatePage")
 
 if __name__ == "__main__":
     app = MainApplication()
     app.mainloop()
-
-

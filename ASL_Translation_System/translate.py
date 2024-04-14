@@ -8,6 +8,8 @@ from sign_detection import mediapipe_detection, draw_styled_landmarks, extract_k
 import tensorflow as tf
 from collections import Counter
 import random
+from PIL import Image, ImageTk
+import pyodbc
 
 # Load MediaPipe holistic model and drawing utilities
 mp_holistic = mp.solutions.holistic
@@ -24,13 +26,16 @@ class TranslatePage(tk.Frame):
         tk.Frame.__init__(self, parent, bg='white')
         self.controller = controller
 
+        self.consecutive_correct = 0  # to track consecutive correct predictions
+        self.user_badge = self.fetch_user_badge()  # Assume function to fetch user badge from DB
+
         # Setup top bar, navigation buttons, etc.
         self.setup_ui_components()
 
         self.sequence = []
         self.predictions = []
         self.res = [0] * len(actions)
-        self.threshold = 0.5
+        self.threshold = 0.7
         self.predicting = False
         self.testing = False  
         self.start_translating = False
@@ -42,14 +47,50 @@ class TranslatePage(tk.Frame):
         self.display_word = ""
         self.result_display = ""
 
+        # Badge hierarchy: higher numbers represent higher ranks
+        self.badge_hierarchy = {
+            "Beginner": 1,
+            "Intermediate": 2,
+            "Advanced": 3,
+            "Legend": 4
+        }
+
         # Initialize OpenCV video capture object
         self.initialize_video_capture()
 
 
     def setup_ui_components(self):
         # Top bar with title
-        top_bar = tk.Frame(self, bg='#03045E', height=80)  
+        top_bar = tk.Frame(self, bg='#03045E', height=60)  
         top_bar.pack(fill='x', side='top', expand=False)
+
+        # Define desired icon size
+        logout_icon_size = (30, 30)  # width, height in pixels
+        badge_icon_size = (40, 40)  # width, height in pixels
+
+        # Load button images
+        logout_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Icon\\logout.png"
+        badge_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Icon\\badge.png"
+        logout_image_original = Image.open(logout_icon_path)
+        badge_image_original = Image.open(badge_icon_path)
+
+        # Resize images to the defined icon_size
+        logout_image_resized = logout_image_original.resize(logout_icon_size, Image.Resampling.LANCZOS)
+        badge_image_resized = badge_image_original.resize(badge_icon_size, Image.Resampling.LANCZOS)
+
+        # Convert to PhotoImage
+        logout_image = ImageTk.PhotoImage(logout_image_resized)
+        badge_image = ImageTk.PhotoImage(badge_image_resized)
+
+        logout_button = tk.Button(top_bar, image=logout_image, borderwidth=0, bg='#03045E', activebackground='#03045E', command=self.logout)
+        logout_button.image = logout_image  # keep a reference to the image object
+        logout_button.pack(side='left', fill="y", expand=False, padx=10)
+
+        badge_button = tk.Button(top_bar, image=badge_image, borderwidth=0, bg='#03045E', activebackground='#03045E', 
+                                 command=lambda: self.controller.show_frame("BadgePage"))
+        badge_button.image = badge_image  # keep a reference to the image object
+        badge_button.pack(side='right', fill="y", expand=False, padx=10)
+
         title_label = tk.Label(top_bar, text="American Sign Language Translator", bg='#03045E', fg='white', font=("Roboto", 24))
         title_label.pack(pady=20)
 
@@ -105,6 +146,9 @@ class TranslatePage(tk.Frame):
         self.display_word = f"Sign this word: {self.selected_word}"
         self.display_test_word(self.display_word)
         self.predictions.clear()
+        self.user_badge = self.fetch_user_badge()
+
+
 
 
     def display_test_word(self, test_word_result):
@@ -118,8 +162,6 @@ class TranslatePage(tk.Frame):
         else:
             self.test_word_label.config(fg='#03045E')
             self.test_word_label.config(text=words)
-
-
     
     def update_translation_status(self, image):
         if self.start_translating:
@@ -175,13 +217,12 @@ class TranslatePage(tk.Frame):
                         prediction_counter = Counter([pred[0] for pred in self.predictions])
                         most_common_prediction, _ = prediction_counter.most_common(1)[0]
                         average_confidence = np.mean([pred[1] for pred in self.predictions if pred[0] == most_common_prediction])
-                        print(average_confidence)
                         # Check against the threshold - Only display or use the action if its confidence exceeds the threshold
-                        if average_confidence > 2:
+                        if average_confidence > self.threshold:
                             action = actions[most_common_prediction]
                             self.display_translated_word(action)
                         else:
-                            self.display_translated_word("Confidence below threshold, action not displayed.")
+                            self.display_translated_word("Confidence below threshold, action is not translated")
 
                     # Reset prediction mode
                     self.predicting = False
@@ -204,6 +245,13 @@ class TranslatePage(tk.Frame):
                     if self.predictions:
                         most_common = Counter(self.predictions).most_common(1)[0][0]
                         predicted_action = actions[most_common]
+                        if predicted_action == self.selected_word:
+                            self.consecutive_correct += 1
+                        else:
+                            self.consecutive_correct = 0
+
+                        self.update_user_badge()
+
                         self.result_display = "Correct" if predicted_action == self.selected_word else "Wrong"
                         self.display_test_word(self.result_display)
 
@@ -220,9 +268,63 @@ class TranslatePage(tk.Frame):
 
         self.after(10, self.update_video_feed)  # Continue updating the feed
 
+
+    def fetch_user_badge(self):
+        try:
+            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
+            cursor = conn.cursor()
+            cursor.execute("SELECT badge FROM users WHERE username=?", (self.controller.username,))
+            result = cursor.fetchone()  # Store the result of fetchone in a variable
+            badge = result[0] if result else "No badge"  # Check if result is not None
+            conn.close()
+            return badge
+        except pyodbc.Error as e:
+            print("Database error:", e)
+            return None
+
+        
+
+        
+    def update_user_badge(self):
+        if self.user_badge == "Legend":
+            return  # No need to update if already a Legend
+
+        new_badge = None
+        if self.consecutive_correct >= 10:
+            new_badge = "Legend"
+        elif self.consecutive_correct >= 7:
+            new_badge = "Advanced"
+        elif self.consecutive_correct >= 5:
+            new_badge = "Intermediate"
+        elif self.consecutive_correct >= 3:
+            new_badge = "Beginner"
+
+        # Only update the badge if it's an upgrade
+        if new_badge and (self.badge_hierarchy[new_badge] > self.badge_hierarchy.get(self.user_badge, 0)):
+            self.update_badge_in_database(new_badge)
+
+    def update_badge_in_database(self, new_badge):
+        try:
+            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
+            cursor = conn.cursor()
+            cursor.execute("UPDATE users SET badge=? WHERE username=?", (new_badge, self.controller.username))
+            conn.commit()
+            conn.close()
+            self.user_badge = new_badge  # Update local badge state
+            tk.messagebox.showinfo("Badge updated to {new_badge}")
+        except pyodbc.Error as e:
+            print("Failed to update badge:", e)
+
     def destroy(self):
         # Release resources when closing the application
         if self.cap.isOpened():
             self.cap.release()
         self.holistic.close()
-        super().destroy()
+        super().destroy()       
+    
+    def logout(self):
+        # Ask the user for confirmation before logging out
+        if messagebox.askyesno("Logout", "Are you sure you want to logout?"):
+            self.translated_word_label.config(text="")
+            self.test_word_label.config(text="")
+            self.controller.show_frame("LoginPage")
