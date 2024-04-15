@@ -10,6 +10,9 @@ from collections import Counter
 import random
 from PIL import Image, ImageTk
 import pyodbc
+import pyttsx3
+import time
+import threading
 
 # Load MediaPipe holistic model and drawing utilities
 mp_holistic = mp.solutions.holistic
@@ -31,6 +34,10 @@ class TranslatePage(tk.Frame):
 
         # Setup top bar, navigation buttons, etc.
         self.setup_ui_components()
+
+        self.engine = pyttsx3.init()
+        rate = self.engine.getProperty('rate')
+        self.engine.setProperty('rate', rate - 50)
 
         self.sequence = []
         self.predictions = []
@@ -134,7 +141,12 @@ class TranslatePage(tk.Frame):
 
     def display_translated_word(self, translated_word):
         self.translated_word_label.config(text=translated_word)
+        threading.Thread(target=self.delayed_speech, args=(translated_word,)).start()
     
+    def delayed_speech(self, text):
+        self.engine.say(text)
+        self.engine.runAndWait()
+
     def test_sign(self):
         self.mode = "test"
         self.translated_word_label.config(text="")
