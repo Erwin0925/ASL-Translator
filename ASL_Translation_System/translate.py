@@ -19,7 +19,7 @@ mp_drawing = mp.solutions.drawing_utils
 actions = np.array(["Family", "Friends", "Work", "School", "Home", "Car", "Happy", "Sad", "Play", 
                     "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Clothe", "Me", "Stop"])
 
-CNN_model = tf.keras.models.load_model("CNN_Model.h5")
+CNN_model = tf.keras.models.load_model("C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Models\\CNN_Model.h5")
 
 class TranslatePage(tk.Frame):
     def __init__(self, parent, controller):
@@ -69,8 +69,8 @@ class TranslatePage(tk.Frame):
         badge_icon_size = (40, 40)  # width, height in pixels
 
         # Load button images
-        logout_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Icon\\logout.png"
-        badge_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Icon\\badge.png"
+        logout_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\ASL_Translation_System\\Icon\\logout.png"
+        badge_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\ASL_Translation_System\\Icon\\badge.png"
         logout_image_original = Image.open(logout_icon_path)
         badge_image_original = Image.open(badge_icon_path)
 

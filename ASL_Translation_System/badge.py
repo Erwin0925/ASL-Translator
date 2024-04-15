@@ -40,21 +40,21 @@ class BadgePage(tk.Frame):
          # Load badge images
         # Load badge images based on badge level
         badge_paths = {
-            "beginner": ["C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_1.png"],
+            "beginner": ["C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png"],
             "Intermediate": [
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_1.png",
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_2.png"
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png",
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_2.png"
             ],
             "advanced": [
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_1.png",
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_2.png",
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_3.png"
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png",
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_2.png",
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_3.png"
             ],
             "legend": [
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_1.png",
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_2.png",
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_3.png",
-                "C:/Users/erwin/Desktop/ASL_Translation_FYP/Badge_Icon/success_4.png"
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png",
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_2.png",
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_3.png",
+                "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_4.png"
             ]
         }
         badge_images = [PhotoImage(file=path) for path in badge_paths.get(self.user_badge, [])]  # Load images based on badge level
