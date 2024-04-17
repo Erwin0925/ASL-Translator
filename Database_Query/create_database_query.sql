@@ -12,3 +12,9 @@ CREATE TABLE users (
     security_question_answer NVARCHAR(255) NOT NULL,
     badge NVARCHAR(255) NOT NULL
 );
+
+ALTER TABLE users
+ADD test_correct INT NOT NULL DEFAULT 0;
+
+ALTER TABLE users
+ADD total_test INT NOT NULL DEFAULT 0;

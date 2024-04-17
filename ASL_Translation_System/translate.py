@@ -300,13 +300,13 @@ class TranslatePage(tk.Frame):
 
         new_badge = None
         if self.consecutive_correct >= 10:
-            new_badge = "Legend"
+            new_badge = "legend"
         elif self.consecutive_correct >= 7:
-            new_badge = "Advanced"
+            new_badge = "advanced"
         elif self.consecutive_correct >= 5:
-            new_badge = "Intermediate"
+            new_badge = "intermediate"
         elif self.consecutive_correct >= 3:
-            new_badge = "Beginner"
+            new_badge = "beginner"
 
         # Only update the badge if it's an upgrade
         if new_badge and (self.badge_hierarchy[new_badge] > self.badge_hierarchy.get(self.user_badge, 0)):
