@@ -28,31 +28,31 @@ class BadgePage(tk.Frame):
         test_correct, test_wrong = self.fetch_test_results()
 
         # Add a Canvas widget for the donut chart
-        chart_canvas = Canvas(self, width=200, height=200, bg='white', highlightthickness=0)
-        chart_canvas.pack(pady=(0, 0))
+        self.chart_canvas = Canvas(self, width=200, height=200, bg='white', highlightthickness=0)
+        self.chart_canvas.pack(pady=(0, 0))
 
         # Draw the donut chart with the test result percentages
-        self.draw_donut_chart(chart_canvas, test_correct, test_wrong)
+        self.draw_donut_chart(self.chart_canvas, test_correct, test_wrong)
 
         # Subtitle "Badge"
         badge_label = tk.Label(self, text="Badges", font=("Roboto", 15, "bold"), fg='#03045E', bg='white')
-        badge_label.pack(side="top", fill="x", pady=(5, 0))
-                
+        badge_label.pack(side="top", fill="x", pady=(5, 0))                
+        
         # Badges Frame
-        badges_frame = tk.Frame(self, bg='#E0EBF3', width=250, height=250)
-        badges_frame.pack(expand=True, fill='both', padx=40, pady=(10,20))
-        badges_frame.pack_propagate(False)  # Prevent the frame from resizing
+        self.badges_frame = tk.Frame(self, bg='#E0EBF3', width=250, height=250)
+        self.badges_frame.pack(expand=True, fill='both', padx=40, pady=(10,20))
+        self.badges_frame.pack_propagate(False)  # Prevent the frame from resizing
 
         # Configure the grid columns and rows to center the badges
-        badges_frame.columnconfigure(0, weight=1)
-        badges_frame.columnconfigure(1, weight=1)
-        badges_frame.columnconfigure(2, weight=1)
-        badges_frame.rowconfigure(0, weight=1)
-        badges_frame.rowconfigure(1, weight=1)
+        self.badges_frame.columnconfigure(0, weight=1)
+        self.badges_frame.columnconfigure(1, weight=1)
+        self.badges_frame.columnconfigure(2, weight=1)
+        self.badges_frame.rowconfigure(0, weight=1)
+        self.badges_frame.rowconfigure(1, weight=1)
 
         # Load badge images
         # Load badge images based on badge level
-        badge_paths = {
+        self.badge_paths = {
             "beginner": ["C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png"],
             "Intermediate": [
                 "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png",
@@ -70,20 +70,8 @@ class BadgePage(tk.Frame):
                 "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_4.png"
             ]
         }
-        badge_images = [PhotoImage(file=path) for path in badge_paths.get(self.user_badge, [])]  # Load images based on badge level
 
-
-        # Display images
-        badge_labels = []
-        for i in range(2):
-            for j in range(2):
-                index = i * 2 + j
-                if index < len(badge_images):  # Only display as many images as the badge level allows
-                    badge_label = tk.Label(badges_frame, image=badge_images[index], bg='#E0EBF3')
-                    badge_label.image = badge_images[index]  # Keep a reference to the image object
-                    badge_label.grid(row=i, column=j + 1, sticky='nsew', padx=10, pady=10)
-                    badge_labels.append(badge_label)
-                
+        self.display_badges()        
 
         # Back button
         nav_bar = tk.Frame(self, bg='#03045E')
@@ -153,6 +141,40 @@ class BadgePage(tk.Frame):
         text_color = "black" if total > 0 else "#D9D9D9"  # Grey text if no attempts
         canvas.create_text(x, y, text=f"{int(percentage)}%" if total > 0 else "No Test", fill=text_color, font=("Roboto", 14))
 
-    
-        
+    def update_page(self):
+        # Clear previous content if necessary or update it
+        self.user_badge = self.fetch_user_badge()  # Re-fetch user badge
+        test_correct, test_wrong = self.fetch_test_results()  # Re-fetch test results
 
+        # Assuming you have a method to clear the current canvas and badge displays
+        self.clear_canvas_and_badges()
+        
+        # Redraw UI components that depend on fetched data
+        self.draw_donut_chart(self.chart_canvas, test_correct, test_wrong)
+        self.display_badges()
+        
+    def display_badges(self):
+        badge_images = [PhotoImage(file=path) for path in self.badge_paths.get(self.user_badge, [])]  # Load images based on badge level
+
+        # Display images
+        self.badge_labels = []
+        for i in range(2):
+            for j in range(2):
+                index = i * 2 + j
+                if index < len(badge_images):  # Only display as many images as the badge level allows
+                    badge_label = tk.Label(self.badges_frame, image=badge_images[index], bg='#E0EBF3')
+                    badge_label.image = badge_images[index]  # Keep a reference to the image object
+                    badge_label.grid(row=i, column=j + 1, sticky='nsew', padx=10, pady=10)
+                    self.badge_labels.append(badge_label)
+
+    
+    
+    
+    def clear_canvas_and_badges(self):
+        # Clear the canvas
+        self.chart_canvas.delete("all")
+        
+        # Clear badge labels
+        for badge_label in self.badge_labels:
+            badge_label.destroy()
+        self.badge_labels.clear() 

@@ -42,6 +42,11 @@ class MainApplication(tk.Tk):
         if page_name not in self.frames and page_name in {"TranslatePage", "BadgePage"}:
             self.init_frame(eval(page_name), self.frames["LoginPage"].parent)
 
+        frame = self.frames[page_name]
+        if page_name == "BadgePage":
+            frame.update_page()  # Refresh the badge data every time the page is shown
+
+
         # Adjust window size based on the frame being shown
         self.adjust_window_size(page_name)
         self.frames[page_name].tkraise()
@@ -79,6 +84,7 @@ class MainApplication(tk.Tk):
             print("Failed to connect to the database:", e)
             tk.messagebox.showerror("Database Error", "Failed to connect to the database.")
             return None
+        
 
     def on_close(self):
         if self.db_connection:
