@@ -257,6 +257,12 @@ class TranslatePage(tk.Frame):
                     if self.predictions:
                         most_common = Counter(self.predictions).most_common(1)[0][0]
                         predicted_action = actions[most_common]
+                        
+                        correct = predicted_action == self.selected_word
+
+                        # Call the update_test_results method with the result
+                        self.update_test_results(correct)
+
                         if predicted_action == self.selected_word:
                             self.consecutive_correct += 1
                         else:
@@ -323,6 +329,29 @@ class TranslatePage(tk.Frame):
             tk.messagebox.showinfo("Badge updated to {new_badge}")
         except pyodbc.Error as e:
             print("Failed to update badge:", e)
+
+    def update_test_results(self, correct):
+        try:
+            # Establish the database connection
+            conn = pyodbc.connect('DRIVER={SQL Server};SERVER=Erwin-Legion;DATABASE=ASL_Translator;Trusted_Connection=yes')
+            cursor = conn.cursor()
+
+            # Build the SQL query based on the result
+            if correct:
+                update_query = "UPDATE users SET test_correct = test_correct + 1 WHERE username = ?"
+            else:
+                update_query = "UPDATE users SET test_wrong = test_wrong + 1 WHERE username = ?"
+
+            # Execute the query
+            cursor.execute(update_query, (self.controller.username,))
+            conn.commit()  # Commit the changes to the database
+
+        except pyodbc.Error as e:
+            print("Database error:", e)
+        finally:
+            # Always close the connection
+            if conn:
+                conn.close()
 
     def destroy(self):
         # Release resources when closing the application
