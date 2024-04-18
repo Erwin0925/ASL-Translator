@@ -18,3 +18,5 @@ ADD test_correct INT NOT NULL DEFAULT 0;
 
 ALTER TABLE users
 ADD total_test INT NOT NULL DEFAULT 0;
+
+EXEC sp_rename 'ASL_Translator.dbo.users.total_wrong', 'test_wrong', 'COLUMN';

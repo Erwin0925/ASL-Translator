@@ -77,7 +77,7 @@ class TranslatePage(tk.Frame):
 
         # Load button images
         logout_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\ASL_Translation_System\\Icon\\logout.png"
-        badge_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\ASL_Translation_System\\Icon\\badge.png"
+        badge_icon_path = "C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\ASL_Translation_System\\Icon\\result.png"
         logout_image_original = Image.open(logout_icon_path)
         badge_image_original = Image.open(badge_icon_path)
 
