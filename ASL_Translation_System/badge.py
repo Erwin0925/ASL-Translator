@@ -54,7 +54,7 @@ class BadgePage(tk.Frame):
         # Load badge images based on badge level
         self.badge_paths = {
             "beginner": ["C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png"],
-            "Intermediate": [
+            "intermediate": [
                 "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_1.png",
                 "C:/Users/erwin/Desktop/ASL_Translation_FYP/ASL_Translation_System/Badge_Icon/success_2.png"
             ],
