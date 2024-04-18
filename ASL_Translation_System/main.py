@@ -4,6 +4,7 @@ from register import RegisterPage
 from reset_pw import ResetPasswordPage
 from translate import TranslatePage
 from badge import BadgePage
+from dictionary import DictionaryPage
 import pyodbc
 
 class MainApplication(tk.Tk):
@@ -23,7 +24,7 @@ class MainApplication(tk.Tk):
         self.username = None
 
         # Initialize only the necessary pages at startup
-        for F in (LoginPage, RegisterPage, ResetPasswordPage):
+        for F in (LoginPage, RegisterPage, ResetPasswordPage, DictionaryPage):
             frame = F(parent=self.container, controller=self)
             self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -57,8 +58,9 @@ class MainApplication(tk.Tk):
             "LoginPage": "350x350",
             "RegisterPage": "350x520",
             "ResetPasswordPage": "350x520",
-            "TranslatePage": "1063x800",
-            "BadgePage": "350x690"
+            "TranslatePage": "1063x810",
+            "BadgePage": "350x690",
+            "DictionaryPage": "1063x800"
         }
         if page_name in sizes:
             self.geometry(sizes[page_name])
