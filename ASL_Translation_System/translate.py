@@ -160,9 +160,6 @@ class TranslatePage(tk.Frame):
         self.predictions.clear()
         self.user_badge = self.fetch_user_badge()
 
-
-
-
     def display_test_word(self, test_word_result):
         words=test_word_result
         if words == 'Correct':

@@ -20,9 +20,17 @@ class BadgePage(tk.Frame):
         title_label = tk.Label(top_frame, text="American Sign Language Translator", fg='white', bg='#03045E', font=("Roboto", 15))
         title_label.pack(pady=(20, 20))
 
+        # Title Frame
+        title_frame = tk.Frame(self, bg='white')
+        title_frame.pack(fill='x', side='top', expand=False)
+
+        # Welcome Label
+        self.welcome_label = tk.Label(title_frame, text=f"Welcome, {self.controller.username}", fg='#03045E', bg='white',font=("Roboto", 10))
+        self.welcome_label.pack(side="top",anchor='w',padx=(15,0))
+    
         # Subtitle "Test Result"
-        badge_label = tk.Label(self, text="Test Result", font=("Roboto", 15, "bold"), fg='#03045E', bg='white')
-        badge_label.pack(side="top", fill="x", pady=(10, 0))
+        badge_label = tk.Label(title_frame, text="Test Result", font=("Roboto", 15, "bold"), fg='#03045E', bg='white')
+        badge_label.pack(side="top", fill="x", anchor='center')
 
         # Fetch the test results from the database
         test_correct, test_wrong = self.fetch_test_results()

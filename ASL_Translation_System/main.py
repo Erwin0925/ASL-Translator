@@ -58,7 +58,7 @@ class MainApplication(tk.Tk):
             "RegisterPage": "350x520",
             "ResetPasswordPage": "350x520",
             "TranslatePage": "1063x768",
-            "BadgePage": "350x680"
+            "BadgePage": "350x690"
         }
         if page_name in sizes:
             self.geometry(sizes[page_name])
