@@ -20,7 +20,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 # Load CNN model and set actions and colors
 actions = np.array(["Family", "Friends", "Work", "School", "Home", "Car", "Happy", "Sad", "Play", 
-                    "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Cloth", "Me", "Stop"])
+                    "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Clothe", "Me", "Stop"])
 
 CNN_model = tf.keras.models.load_model("C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Models\\CNN_Model.h5")
 
