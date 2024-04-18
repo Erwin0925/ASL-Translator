@@ -57,7 +57,7 @@ class MainApplication(tk.Tk):
             "LoginPage": "350x350",
             "RegisterPage": "350x520",
             "ResetPasswordPage": "350x520",
-            "TranslatePage": "1063x768",
+            "TranslatePage": "1063x800",
             "BadgePage": "350x690"
         }
         if page_name in sizes:
