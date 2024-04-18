@@ -111,14 +111,39 @@ class TranslatePage(tk.Frame):
         self.translated_word_label = tk.Label(self, text=" ", bg='white', fg='#03045E', font=("Roboto", 20))
         self.translated_word_label.pack(pady=(10, 15))  # Adjust padding as necessary
 
-        nav_bar = tk.Frame(self)  
-        nav_bar.pack(fill='x', side='bottom', expand=False)
+        # dictionary_button = tk.Button(self, text="Dictionary", bg='#336081', fg='#03045E', font=("Roboto", 14), height=2, borderwidth=0)
+        # dictionary_button.pack(side='bottom', expand=True, fill='x')
 
-        translate_button = tk.Button(nav_bar, text="Translate", bg='#CAF0F8', fg='#03045E', font=("Roboto", 14), height=2, borderwidth=0, command=self.start_translating)
-        translate_button.pack(side='left', expand=True, fill='x')
+        # nav_bar = tk.Frame(self)  
+        # nav_bar.pack(fill='x', side='bottom', expand=True)
 
-        test_button = tk.Button(nav_bar, text="Test", bg='#5D8FB3', fg='#03045E', font=("Roboto", 14), height=2, borderwidth=0, command=self.test_sign)
-        test_button.pack(side='left', expand=True, fill='x')
+        # translate_button = tk.Button(nav_bar, text="Translate", bg='#CAF0F8', fg='#03045E', font=("Roboto", 14), height=2, borderwidth=0, command=self.start_translating)
+        # translate_button.pack(side='left', expand=True, fill='x')
+
+        # test_button = tk.Button(nav_bar, text="Test", bg='#5D8FB3', fg='#03045E', font=("Roboto", 14), height=2, borderwidth=0, command=self.test_sign)
+        # test_button.pack(side='left', expand=True, fill='x')
+        # Configure the Dictionary button
+        # Configure the Dictionary button
+
+        
+        dictionary_button = tk.Button(self, text="Dictionary", bg='#336081', fg='#03045E', font=("Roboto", 14), borderwidth=0, padx=10, pady=10)  # Increase font size or add padx and pady for bigger buttons
+        dictionary_button.pack(side='bottom', fill='x', expand=True, padx=0, pady=0)
+
+        # Container frame for Translate and Test buttons, set a fixed height if needed
+        nav_bar = tk.Frame(self, height=80)  # You can adjust the height as needed
+        nav_bar.pack_propagate(False)  # Prevent the frame from shrinking to fit its children
+        nav_bar.pack(side='bottom', fill='x', expand=True)
+
+        # Configure the Translate button
+        translate_button = tk.Button(nav_bar, text="Translate", bg='#CAF0F8', fg='#03045E', font=("Roboto", 14), borderwidth=0, command=self.start_translating)  # Increase font size or add padx and pady for bigger buttons
+        translate_button.pack(side='left', fill='both', expand=True, padx=0, pady=0)  # Set padx and pady to 0 to remove space between buttons
+
+        # Configure the Test button
+        test_button = tk.Button(nav_bar, text="Test", bg='#5D8FB3', fg='#03045E', font=("Roboto", 14), borderwidth=0, command=self.test_sign)  # Increase font size or add padx and pady for bigger buttons
+        test_button.pack(side='left', fill='both', expand=True, padx=0, pady=0)  # Set padx and pady to 0 to remove space between buttons
+
+
+
     
     def initialize_video_capture(self):
         self.cap = cv2.VideoCapture(0)
