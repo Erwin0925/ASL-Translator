@@ -31,7 +31,7 @@ The ASL translation system currently supports the following 20 commonly used dai
 15. Computer
 16. Money
 17. Phone
-18. Clothes
+18. Cloth
 19. Me
 20. Stop
 
