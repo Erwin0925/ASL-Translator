@@ -15,10 +15,10 @@
 15. Computer
 16. Money
 17. Phone
-18. Clothes
+18. Cloth
 19. Me
 20. Stop
 
 ------------------
 
-["Family", "Friends", "Work", "School", "Home", "Car", "Happy", "Sad", "Play", "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Clothe", "Me", "Stop"]
+["Family", "Friends", "Work", "School", "Home", "Car", "Happy", "Sad", "Play", "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Cloth", "Me", "Stop"]
