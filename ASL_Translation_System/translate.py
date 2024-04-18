@@ -89,14 +89,14 @@ class TranslatePage(tk.Frame):
         logout_image = ImageTk.PhotoImage(logout_image_resized)
         badge_image = ImageTk.PhotoImage(badge_image_resized)
 
-        logout_button = tk.Button(top_bar, image=logout_image, borderwidth=0, bg='#03045E', activebackground='#03045E', command=self.logout)
-        logout_button.image = logout_image  # keep a reference to the image object
-        logout_button.pack(side='left', fill="y", expand=False, padx=10)
+        self.logout_button = tk.Button(top_bar, image=logout_image, borderwidth=0, bg='#03045E', activebackground='#03045E', command=self.logout)
+        self.logout_button.image = logout_image  # keep a reference to the image object
+        self.logout_button.pack(side='left', fill="y", expand=False, padx=10)
 
-        badge_button = tk.Button(top_bar, image=badge_image, borderwidth=0, bg='#03045E', activebackground='#03045E', 
+        self.badge_button = tk.Button(top_bar, image=badge_image, borderwidth=0, bg='#03045E', activebackground='#03045E', 
                                  command=lambda: self.controller.show_frame("BadgePage"))
-        badge_button.image = badge_image  # keep a reference to the image object
-        badge_button.pack(side='right', fill="y", expand=False, padx=10)
+        self.badge_button.image = badge_image  # keep a reference to the image object
+        self.badge_button.pack(side='right', fill="y", expand=False, padx=10)
 
         title_label = tk.Label(top_bar, text="American Sign Language Translator", bg='#03045E', fg='white', font=("Roboto", 24))
         title_label.pack(pady=20)
@@ -111,9 +111,9 @@ class TranslatePage(tk.Frame):
         self.translated_word_label = tk.Label(self, text=" ", bg='white', fg='#03045E', font=("Roboto", 20))
         self.translated_word_label.pack(pady=(10, 15))  # Adjust padding as necessary
      
-        dictionary_button = tk.Button(self, text="Dictionary", bg='#336081', fg='#03045E', font=("Roboto", 14), 
+        self.dictionary_button = tk.Button(self, text="Dictionary", bg='#336081', fg='#03045E', font=("Roboto", 14), 
                                       borderwidth=0, padx=10, pady=10, command=lambda: self.controller.show_frame("DictionaryPage"))  # Increase font size or add padx and pady for bigger buttons
-        dictionary_button.pack(side='bottom', fill='x', expand=True, padx=0, pady=0)
+        self.dictionary_button.pack(side='bottom', fill='x', expand=True, padx=0, pady=0)
 
         # Container frame for Translate and Test buttons, set a fixed height if needed
         nav_bar = tk.Frame(self, height=80)  # You can adjust the height as needed
@@ -121,16 +121,13 @@ class TranslatePage(tk.Frame):
         nav_bar.pack(side='bottom', fill='x', expand=True)
 
         # Configure the Translate button
-        translate_button = tk.Button(nav_bar, text="Translate", bg='#CAF0F8', fg='#03045E', font=("Roboto", 14), borderwidth=0, command=self.start_translating)  # Increase font size or add padx and pady for bigger buttons
-        translate_button.pack(side='left', fill='both', expand=True, padx=0, pady=0)  # Set padx and pady to 0 to remove space between buttons
+        self.translate_button = tk.Button(nav_bar, text="Translate", bg='#CAF0F8', fg='#03045E', font=("Roboto", 14), borderwidth=0, command=self.start_translating)  # Increase font size or add padx and pady for bigger buttons
+        self.translate_button.pack(side='left', fill='both', expand=True, padx=0, pady=0)  # Set padx and pady to 0 to remove space between buttons
 
         # Configure the Test button
-        test_button = tk.Button(nav_bar, text="Test", bg='#5D8FB3', fg='#03045E', font=("Roboto", 14), borderwidth=0, command=self.test_sign)  # Increase font size or add padx and pady for bigger buttons
-        test_button.pack(side='left', fill='both', expand=True, padx=0, pady=0)  # Set padx and pady to 0 to remove space between buttons
+        self.test_button = tk.Button(nav_bar, text="Test", bg='#5D8FB3', fg='#03045E', font=("Roboto", 14), borderwidth=0, command=self.test_sign)  # Increase font size or add padx and pady for bigger buttons
+        self.test_button.pack(side='left', fill='both', expand=True, padx=0, pady=0)  # Set padx and pady to 0 to remove space between buttons
 
-
-
-    
     def initialize_video_capture(self):
         self.cap = cv2.VideoCapture(0)
         if not self.cap.isOpened():
@@ -149,10 +146,13 @@ class TranslatePage(tk.Frame):
         self.mode = "translate"
         self.test_sign = False
         self.predictions.clear()
+        self.disable_buttons()
+
 
     def display_translated_word(self, translated_word):
         self.translated_word_label.config(text=translated_word)
         threading.Thread(target=self.delayed_speech, args=(translated_word,)).start()
+        self.enable_buttons()
     
     def delayed_speech(self, text):
         self.engine.say(text)
@@ -170,6 +170,7 @@ class TranslatePage(tk.Frame):
         self.display_test_word(self.display_word)
         self.predictions.clear()
         self.user_badge = self.fetch_user_badge()
+        self.disable_buttons()
 
     def display_test_word(self, test_word_result):
         words=test_word_result
@@ -360,7 +361,24 @@ class TranslatePage(tk.Frame):
             # Always close the connection
             if conn:
                 conn.close()
+        self.enable_buttons()
+    
+    def disable_buttons(self):
+        # Disable all buttons during translation or testing
+        self.translate_button.config(state='disabled')
+        self.test_button.config(state='disabled')
+        self.logout_button.config(state='disabled')
+        self.badge_button.config(state='disabled')
+        self.dictionary_button.config(state='disabled')
 
+    def enable_buttons(self):
+        # Re-enable all buttons once the process is completed
+        self.translate_button.config(state='normal')
+        self.test_button.config(state='normal')
+        self.logout_button.config(state='normal')
+        self.badge_button.config(state='normal')
+        self.dictionary_button.config(state='normal')
+    
     def destroy(self):
         # Release resources when closing the application
         if self.cap.isOpened():
