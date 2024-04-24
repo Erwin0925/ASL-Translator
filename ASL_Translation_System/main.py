@@ -3,7 +3,7 @@ from login import LoginPage
 from register import RegisterPage
 from reset_pw import ResetPasswordPage
 from translate_test import TranslatePage
-from Test_Analysis import BadgePage
+from test_analysis import BadgePage
 from dictionary import DictionaryPage
 import pyodbc
 
