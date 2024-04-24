@@ -88,12 +88,17 @@ class RegisterPage(tk.Frame):
             entry.config(show='' if var.get() else '*')
 
     def register(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-        repeat_password = self.repeat_password_entry.get()
-        security_question = self.question_combobox.get()
-        security_answer = self.security_ans_entry.get()
+        username = self.username_entry.get().strip()
+        password = self.password_entry.get().strip()
+        repeat_password = self.repeat_password_entry.get().strip()
+        security_question = self.question_combobox.get().strip()
+        security_answer = self.security_ans_entry.get().strip()
 
+         # Check if any required fields are empty
+        if not (username and password and repeat_password and security_answer):
+            tk.messagebox.showerror("Error", "Please fill in all the required information to complete the registration process.")
+            return
+        
         if password != repeat_password:
             tk.messagebox.showerror("Error", "Passwords do not match!")
             self.password_entry.delete(0, tk.END)
