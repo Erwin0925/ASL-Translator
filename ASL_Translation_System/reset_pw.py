@@ -93,6 +93,10 @@ class ResetPasswordPage(tk.Frame):
         new_password = self.password_entry.get()
         confirm_password = self.repeat_password_entry.get()
 
+        if not (username and new_password and confirm_password and security_answer and security_question):
+            tk.messagebox.showerror("Error", "Please fill in all the required information to complete the registration process.")
+            return
+
         if new_password != confirm_password:
             messagebox.showerror("Error", "New passwords do not match!")
             self.password_entry.delete(0, tk.END)
@@ -109,7 +113,7 @@ class ResetPasswordPage(tk.Frame):
             else:
                 messagebox.showerror("Error", "Failed to reset password.")
         else:
-            messagebox.showerror("Error", "Invalid username or security answer.")
+            messagebox.showerror("Error", "Invalid username or security question and answer.")
             self.clear_fields()
 
     def validate_security_info(self, username, security_question, security_answer):
