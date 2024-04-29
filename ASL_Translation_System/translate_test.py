@@ -153,6 +153,10 @@ class TranslatePage(tk.Frame):
 
     def display_translated_word(self, translated_word):
         definition = self.get_wordnet_definition(translated_word)
+        self.test_word_label.config(font=('Roboto', 13))
+
+
+        self.test_word_label.config(text=definition)
         synonyms = self.get_wordnet_synonyms(translated_word)
         synonyms_text = ', '.join(synonyms)
         display_text = f"{translated_word}, Synonyms : {synonyms_text}"
@@ -182,6 +186,7 @@ class TranslatePage(tk.Frame):
         self.engine.runAndWait()
 
     def test_sign(self):
+        self.test_word_label.config(font=('Roboto', 20))
         self.mode = "test"
         self.translated_word_label.config(text="")
         self.test_word_label.config(text="")
@@ -196,6 +201,7 @@ class TranslatePage(tk.Frame):
         self.disable_buttons()
 
     def display_test_word(self, test_word_result):
+        self.test_word_label.config(font=('Roboto', 20))
         words=test_word_result
         if words == 'Correct':
             self.test_word_label.config(fg='#00FF00')
