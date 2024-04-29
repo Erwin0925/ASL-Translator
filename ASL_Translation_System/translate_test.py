@@ -103,8 +103,13 @@ class TranslatePage(tk.Frame):
         title_label = tk.Label(top_bar, text="American Sign Language Translator", bg='#03045E', fg='white', font=("Roboto", 24))
         title_label.pack(pady=20)
 
+
+        nav_bar_test = tk.Frame(self, height=69, bg='white')
+        nav_bar_test.pack_propagate(False)  # Prevent the frame from resizing to fit its contents
+        nav_bar_test.pack(fill='x', expand=False)
+
         # Navigation buttons
-        self.test_word_label = tk.Label(self, text=" ", bg='white', fg='#03045E', font=("Roboto", 20))
+        self.test_word_label = tk.Label(nav_bar_test, text=" ", bg='white', fg='#03045E', font=("Roboto", 20))
         self.test_word_label.pack(pady=(15, 10))  # Adjust padding as necessary
         
         self.video_area = tk.Label(self, bg='white')  # Create a Label widget
@@ -153,9 +158,14 @@ class TranslatePage(tk.Frame):
 
     def display_translated_word(self, translated_word):
         definition = self.get_wordnet_definition(translated_word)
-        self.test_word_label.config(font=('Roboto', 13))
-
-
+        words = definition.split()
+        if len(words) > 11:
+            self.test_word_label.config(font=('Roboto', 13))
+            if len(words) > 13:
+                # Insert newline after the 13th word
+                definition = ' '.join(words[:13]) + '\n' + ' '.join(words[13:])
+        else:
+            self.test_word_label.config(font=('Roboto', 20))  # Default or larger font
         self.test_word_label.config(text=definition)
         synonyms = self.get_wordnet_synonyms(translated_word)
         synonyms_text = ', '.join(synonyms)
