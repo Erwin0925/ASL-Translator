@@ -13,6 +13,9 @@ import pyodbc
 import pyttsx3
 import time
 import threading
+from nltk.corpus import wordnet as wn
+import fasttext
+
 
 # Load MediaPipe holistic model and drawing utilities
 mp_holistic = mp.solutions.holistic
@@ -23,6 +26,8 @@ actions = np.array(["Family", "Friends", "Work", "School", "Home", "Car", "Happy
                     "Help", "Eat", "Drink", "Sleep", "Sorry", "Computer", "Money", "Phone", "Cloth", "Me", "Stop"])
 
 CNN_model = tf.keras.models.load_model("C:\\Users\\erwin\\Desktop\\ASL_Translation_FYP\\Models\\CNN_Model.h5")
+
+ft = fasttext.load_model('cc.en.300.bin')
 
 class TranslatePage(tk.Frame):
     def __init__(self, parent, controller):
@@ -150,9 +155,27 @@ class TranslatePage(tk.Frame):
 
 
     def display_translated_word(self, translated_word):
-        self.translated_word_label.config(text=translated_word)
+        definition = self.get_wordnet_definition(translated_word)
+        synonyms = self.get_fasttext_synonyms(translated_word)
+        synonyms_text = ', '.join(synonyms)
+        display_text = f"{translated_word} Synonyms : {synonyms_text}"
+        self.test_word_label.config(fg='#03045E')
+        self.test_word_label.config(text=definition)
+        self.translated_word_label.config(text=display_text)
         threading.Thread(target=self.delayed_speech, args=(translated_word,)).start()
         self.enable_buttons()
+
+    def get_wordnet_definition(self, word):
+        synsets = wn.synsets(word)
+        if synsets:
+            return synsets[0].definition()  # Return the first definition
+        return "No definition found."
+
+    def get_fasttext_synonyms(self, word):
+        neighbors = ft.get_nearest_neighbors(word, k=10)
+        synonyms = [neighbor[1] for neighbor in neighbors if wn.synsets(neighbor[1])]
+        return synonyms[:2] 
+
     
     def delayed_speech(self, text):
         self.engine.say(text)
