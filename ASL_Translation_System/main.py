@@ -2,8 +2,8 @@ import tkinter as tk
 from login import LoginPage
 from register import RegisterPage
 from reset_pw import ResetPasswordPage
-from translate import TranslatePage
-from badge import BadgePage
+from translate_test import TranslatePage
+from test_analysis import BadgePage
 from dictionary import DictionaryPage
 import pyodbc
 
