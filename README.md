@@ -45,4 +45,5 @@ Two models have been developed for this project:
 
 ## System Demonstration Video
 https://youtu.be/Vu4XojrXuPI
+[![Watch the video](https://img.youtube.com/vi/Vu4XojrXuPI/maxresdefault.jpg)](https://www.youtube.com/watch?v=Vu4XojrXuPI)
 
