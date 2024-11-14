@@ -14,11 +14,39 @@ This project aims to build an American Sign Language (ASL) translation system th
 
 ### Supported Words
 The ASL translation system currently supports the following 20 commonly used daily words. These words were chosen for their frequency and utility in everyday communication:
-| Family   | Friends  | Work   | School  | Home    |
-|----------|----------|--------|---------|---------|
-| Car      | Happy    | Sad    | Play    | Help    |
-| Eat      | Drink    | Sleep  | Sorry   | Computer|
-| Money    | Phone    | Cloth  | Me      | Stop    |
+<table>
+  <tr>
+    <th colspan="5">Supported Words</th>
+  </tr>
+  <tr>
+    <td>Family</td>
+    <td>Friends</td>
+    <td>Work</td>
+    <td>School</td>
+    <td>Home</td>
+  </tr>
+  <tr>
+    <td>Car</td>
+    <td>Happy</td>
+    <td>Sad</td>
+    <td>Play</td>
+    <td>Help</td>
+  </tr>
+  <tr>
+    <td>Eat</td>
+    <td>Drink</td>
+    <td>Sleep</td>
+    <td>Sorry</td>
+    <td>Computer</td>
+  </tr>
+  <tr>
+    <td>Money</td>
+    <td>Phone</td>
+    <td>Cloth</td>
+    <td>Me</td>
+    <td>Stop</td>
+  </tr>
+</table>
 
 
 ## Models
