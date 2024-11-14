@@ -44,6 +44,7 @@ Two models have been developed for this project:
 - **SSMS**: SQL Server Management Studio (SSMS) is used for managing the database operations related to the storage of ASL data and user interactions.
 
 ## System Demonstration Video
+[![Watch the video](https://img.youtube.com/vi/Vu4XojrXuPI/maxresdefault.jpg)](https://youtu.be/Vu4XojrXuPI?si=mkKx3yDBjFCPqzvR)
 https://youtu.be/Vu4XojrXuPI
 
 
