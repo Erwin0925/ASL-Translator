@@ -1,4 +1,4 @@
-# ASL_Translation_FYP - ASL Translation System
+# ASL Translation System
 
 ## Introduction
 This project aims to build an American Sign Language (ASL) translation system that can recognize and translate 20 commonly used daily words. In addition to translating ASL, this system includes a functionality to test users' knowledge of ASL. This can be an excellent tool for both learning and practicing ASL.
