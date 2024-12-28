@@ -29,6 +29,3 @@ Two models have been developed for this project:
 
 ## System Demonstration Video
 [![Watch the video](https://img.youtube.com/vi/Vu4XojrXuPI/maxresdefault.jpg)](https://youtu.be/Vu4XojrXuPI?si=mkKx3yDBjFCPqzvR)
-https://youtu.be/Vu4XojrXuPI
-
-
